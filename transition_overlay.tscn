@@ -1,0 +1,88 @@
+[gd_scene load_steps=10 format=3 uid="uid://c0hjfqwf37l4u"]
+
+[ext_resource type="Shader" path="res://transition.gdshader" id="1_4dnwj"]
+[ext_resource type="Script" path="res://transition_overlay.gd" id="2_nqn4g"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kj4i1"]
+shader = ExtResource("1_4dnwj")
+shader_parameter/count = 16.0
+shader_parameter/progress = 0.0
+shader_parameter/invert = false
+shader_parameter/direction = Vector2(0, 1)
+
+[sub_resource type="Gradient" id="Gradient_woj85"]
+colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_d0mcw"]
+gradient = SubResource("Gradient_woj85")
+fill_to = Vector2(0, 1)
+
+[sub_resource type="Animation" id="Animation_15sxl"]
+resource_name = "fade_in"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:material:shader_parameter/progress")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [1.0, 0.0]
+}
+
+[sub_resource type="Animation" id="Animation_kjhnr"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:material:shader_parameter/progress")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_grvb2"]
+resource_name = "fade_out"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:material:shader_parameter/progress")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(2, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_rovf8"]
+_data = {
+"RESET": SubResource("Animation_kjhnr"),
+"fade_in": SubResource("Animation_15sxl"),
+"fade_out": SubResource("Animation_grvb2")
+}
+
+[node name="Overlay" type="TextureRect"]
+material = SubResource("ShaderMaterial_kj4i1")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_d0mcw")
+script = ExtResource("2_nqn4g")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_rovf8")
+}
+
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

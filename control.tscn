@@ -1,0 +1,63 @@
+[gd_scene load_steps=6 format=3 uid="uid://0ejshwi7eiuc"]
+
+[ext_resource type="Script" path="res://control.gd" id="1_025hs"]
+[ext_resource type="PackedScene" uid="uid://c0hjfqwf37l4u" path="res://transition_overlay.tscn" id="2_0m6po"]
+[ext_resource type="Texture2D" uid="uid://c3ngu2wrc501j" path="res://fd.jpg" id="2_bx62v"]
+
+[sub_resource type="Gradient" id="Gradient_31p2d"]
+colors = PackedColorArray(0, 0, 0, 1, 0.299547, 0.299547, 0.299547, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_scgs1"]
+gradient = SubResource("Gradient_31p2d")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0, 1)
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_025hs")
+
+[node name="Sprite2D" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_bx62v")
+
+[node name="FadeOutButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.108
+anchor_bottom = 0.059
+offset_left = 952.0
+offset_top = 104.0
+offset_right = 1044.64
+offset_bottom = 110.28
+theme_override_font_sizes/font_size = 40
+text = "Fade out"
+
+[node name="FadeInButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.067
+anchor_bottom = 0.111
+offset_left = 408.0
+offset_top = 104.0
+offset_right = 579.36
+offset_bottom = 54.12
+theme_override_font_sizes/font_size = 40
+text = "Fade in"
+
+[node name="TransitionOverlay" parent="." instance=ExtResource("2_0m6po")]
+layout_mode = 1
+texture = SubResource("GradientTexture2D_scgs1")
+
+[connection signal="pressed" from="FadeOutButton" to="." method="_on_fade_out_button_pressed"]
+[connection signal="pressed" from="FadeInButton" to="." method="_on_fade_in_button_pressed"]
